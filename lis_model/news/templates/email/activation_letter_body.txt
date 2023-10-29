@@ -1,0 +1,6 @@
+﻿Hello, {{ user.username }}
+
+Are you registered.
+
+Follow the link to activate your account
+{{ host }}{% url 'news:register_activate' sign=sign %}

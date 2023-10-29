@@ -1,0 +1,23 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="post">
+  {% if messageSent %}
+    <div class="container">
+      <h3><strong>Вы записались</strong></h3>
+      <a href="{% url 'news:index' %}" class="post_link">Календарь мероприятий</a>
+    </div>
+  {% else %}
+    <div class="container">
+      <form method="post">
+        {% csrf_token %}
+        <label for="id_message">Message:</label>
+        <textarea name="message" cols="40" rows="10" required="" id="id_message"></textarea>
+        <div class="text-center">
+          <input type="submit" class="btn btn-secondary" value="Записаться"/>
+        </div>
+      </form>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+

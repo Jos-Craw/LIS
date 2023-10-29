@@ -1,0 +1,11 @@
+{% extends "layout/basic.html" %}
+
+
+{% block title %}Уже активировано{% endblock %}
+
+{% block content %}
+<div class="profile">
+	Этот пользователь уже был активирован
+	<br><a href="{% url 'news:login' %}" class="post_link">Войти</a>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Удалить аккаунт{% endblock %}
+
+{% block content %}
+<div class="delete">
+	Удалить аккаунт пользователя {{object.username}}
+	<form method="post">
+		{% csrf_token %}
+		<button type="submit" class="btn btn-danger">Удалить аккаунт</button>
+	</form>
+</div>
+{% endblock %}

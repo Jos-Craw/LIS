@@ -1,0 +1,76 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+	<div class="post">
+		<div class="post-author">
+			<div class="post-author-a">
+				<div>
+					Дата публикации: {{ vist.pubdate|date:"d M Y H:i" }}
+				</div>
+			</div>
+		</div>
+		<div class="post-content">
+			{{ vist.name}}<br>
+			{{ vist.content}}<br>
+			Цена: {{ vist.stoim }}<br>
+			{% if vist.image %}
+				<a href="{{ vist.image.url }}"><img src="{{ vist.image.url }}" class="media"></a>
+			{% endif %}
+			{% if vist.video %}
+				<video src="{{ vist.video.url }}" class="media" controls="controls"></video><br>
+			{% endif %}
+			{% if vist.audio %}
+				<audio src="{{ vist.audio.url }}" controls="controls"></audio><br>
+			{% endif %}
+			{% if vist.file %}
+				<a href='{{ vist.file.url }}' target="-blank" class="file">{{vist.filename}}</a><br>
+			{% endif %}
+			{% if user.is_authenticated %}
+			{% endif %}
+		</div>
+		<div>
+			{% for event in vist.event.all %}
+				{% if event.zan == False%}
+					{% if a <  event.eventdate  %}
+						<div class="post">
+							{{ event.eventdate }}<br>
+							{{ event.eventtime }}<br>
+							<a href="{% url 'news:zapisv' pk1=vist.id pk2=event.id %}" class="post_link">ЗАПИСАТЬСЯ ЛИЧНО</a><br>
+							<a href="{% url 'news:zapisgv' pk1=vist.id pk2=event.id %}" class="post_link">ГРУППОВАЯ ЗАПИСЬ</a><br>
+						</div>
+					{% else %}
+						Мероприятие прошло<br>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			{% if post.image %}
+				<a href="{{ post.image.url }}"><img src="{{ post.image.url }}" class="media"></a>
+			{% endif %}
+			{% if post.video %}
+				<video src="{{ post.video.url }}" class="media" controls="controls"></video><br>
+			{% endif %}
+			{% if post.audio %}
+				<audio src="{{ post.audio.url }}" controls="controls"></audio><br>
+			{% endif %}
+			{% if post.file %}
+				<a href='{{ post.file.url }}' target="-blank" class="file">{{post.filename}}</a><br>
+			{% endif %}
+		</div>
+	{% if messageSent %}
+		Отзыв опубликуется после модерации
+	{% endif %}
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="btn btn-success">Добавить отзыв</button>
+	</form><br>
+	{% if comments %}
+		{% for comment in comments %}
+			<div class="comment">
+				{{ comment.author }} {{ comment.pubdate|date:"d M Y H:i" }}<br>
+				{{ comment.content|urlize }}<br>
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock %}

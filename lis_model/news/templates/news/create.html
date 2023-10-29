@@ -1,0 +1,12 @@
+{% extends "layout/basic.html" %}
+
+{% block title %}Добавить мероприятие{% endblock %}
+{% block content %}
+<div class="profile">
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form }}
+		<br><button type="submit" class="btn btn-success">Добавить мероприятие</button>
+	</form>
+</div>
+{% endblock %}

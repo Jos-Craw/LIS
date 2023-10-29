@@ -1,0 +1,21 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="post">
+  {% if messageSent %}
+    <div class="container">
+      <h3><strong>Вы записались</strong></h3>
+      <a href="{% url 'news:consult' %}" class="post_link">Консультации психолога</a>
+    </div>
+  {% else %}
+    <div class="container">
+      <form method="post">Запись на консультацию психолога на {{consult.eventdate}} {{consult.eventtime}}
+        {% csrf_token %}
+        {{ form }}<br/>
+        <div class="text-center">
+          <input type="submit" class="btn btn-secondary" value="Записаться"/>
+        </div>
+      </form>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+
+<div class="def">
+	Консультация психолога.<br> Здесь вы можете выбрать подходящие дату и время для консультации с психологом<br><br>
+	{% if user.id == 8 or user.id == 1 %}
+		Вы можете добавить консультацию
+		<form method="post">
+			{% csrf_token %}
+			<div>{{ form }}</div>
+			<button type="submit" class="btn btn-success">Создать</button>
+		</form>
+	{% else %}
+		Запись на консультацию<br><br>
+	{% endif %}
+	{% if consults %}
+		{% for consult in consults %}
+			<div class="post">
+				{{ consult.eventdate }}<br>
+				{{ consult.get_eventtime_display }}<br>
+				{% if user.is_authenticated %}
+					<a href="{% url 'news:zap_consult' pk=consult.pk %}" class="post_link" >Выбрать</a><br>
+				{% endif %}
+			</div>
+		{% endfor %}
+	{% else %}
+		Записей нет<br><br>
+	{% endif %}
+</div>
+{% endblock %}

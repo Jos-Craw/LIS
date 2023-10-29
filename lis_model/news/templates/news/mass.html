@@ -1,0 +1,85 @@
+{% extends "layout/basic.html" %}
+{% block title %}Массовые мероприятия и выставки{% endblock %}
+
+{% block content %}
+{% if user.id == 6 or user.id == 1  %}
+	<div class="post">
+		<a href="{% url 'news:add' %}"  class="post_link">Создать событие</a><br>
+		<a href="{% url 'news:add_v' %}"  class="post_link">Добавить выставку</a><br>
+	</div>
+{% endif %}
+<div class="calendar">
+	Выберите период времени
+	<form method="post">
+		{% csrf_token %}
+		<div>{{ form }}</div>
+		<button type="submit">Выбрать</button>
+	</form>
+</div>
+{% if vists %}
+	{% for vist in vists %}
+		<div class="post">
+			<div class="post-author">
+				<div class="post-author-a">
+			    	<div>
+						Выставка <br>
+						Дата публикации: {{ vist.pubdate|date:"d M Y H:i" }}<br>
+						C {{ vist.start_date|date:"d M Y" }} ПО {{ vist.final_date|date:"d M Y" }}<br>
+					</div>
+				</div>
+				{% if user.is_authenticated %}
+					<div class="post-author-b">
+						<a href="{% url 'news:detail_v' pk=vist.pk %}" class="post_link">⋮</a>
+					</div>
+				{% endif %}
+			</div>
+			<div class="post-content">
+				{{ vist.name}}<br>
+				Цена: {{ vist.stoim }}<br>
+				{% if vist.image %}
+					<a href="{{ vist.image.url }}"><img src="{{ vist.image.url }}" class="media"></a>
+				{% endif %}
+			</div>
+		</div>
+	{% endfor %}
+{% endif %}
+{% if posts %}
+	{% for post in posts %}
+		{% if post.tags == 'mass' %}
+			<div class="post">
+				<div class="post-author">
+					<div class="post-author-a">
+			    		<div>
+							{% if post.tags == 'mass' %}
+								<a href="{% url 'news:mass' %}" class="post_link">{{ post.get_tags_display}}</a><br>
+								{% if post.vist == True %}
+									Выставка <br>
+								{% endif %}
+							{% endif %}
+							Дата публикации: {{ post.pubdate|date:"d M Y H:i" }}
+						</div>
+					</div>
+					{% if user.is_authenticated %}
+						<div class="post-author-b">
+							<a href="{% url 'news:detail' pk=post.pk %}" class="link">⋮</a>
+						</div>
+					{% endif %}
+				</div>
+				<div class="post-content">
+					{{ post.name}}<br> {{ post.eventtime }} {{ post.eventdate }}<br>
+					Количество свободных мест: {{ post.mesta }}<br>
+					Цена: {{ post.stoim }}<br>
+					{% if user.is_authenticated %}
+						{% if post in your_zapisi %}
+							Вы записаны<br>
+						{% endif %}
+					{% endif %}
+					{% if post.image %}
+						<a href="{{ post.image.url }}"><img src="{{ post.image.url }}" class="media"></a>
+					{% endif %}
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+{% endblock %}

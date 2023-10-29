@@ -1,0 +1,11 @@
+{% extends "layout/basic.html" %}
+
+
+{% block title %}Ошибка активации{% endblock %}
+
+{% block content %}
+<div class="profile">
+	Активация не удалась<br>
+	<a href="{% url 'news:register' %}" class="post_link">Зарегистрироваться снова</a>
+</div>
+{% endblock %}

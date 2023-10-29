@@ -1,0 +1,15 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Редактировать профиль{% endblock %}
+
+{% block content %}
+<div class="profile">
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form }}
+		<button type="submit" class="btn btn-success">Сохранить</button>
+	</form>
+</div>
+{% endblock %}

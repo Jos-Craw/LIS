@@ -1,0 +1,20 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="login">
+	{% if user.is_authenticated%}
+	Login already done
+	{% else %}
+	<form method="post">
+		{% csrf_token %}
+		{% bootstrap_form form layout='horizontal' %}
+		<input type="hidden" name="next" value="{% url 'news:index' %}">
+		<button type="submit" class="btn btn-primary">Войти</button>
+	</form>
+	{% endif %}
+</div>
+{% endblock %}

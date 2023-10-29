@@ -1,0 +1,70 @@
+{% extends "layout/basic.html" %}
+{% block title %}Трудовая и волонтерская деятельность{% endblock %}
+
+{% block content %}
+	<div class="post">
+		Записаться на трудовое направление<br>
+		{% for trud in truds %}
+			{{trud.name}}<br>
+			{% if user.is_authenticated %}
+				<a href="{% url 'news:trud_naprav' pk=trud.pk %}" class="post_link">Записаться</a><br>
+			{% endif %}
+		{% endfor %}
+		Записаться на волонтерское направление<br>
+		{% for volont in volonts %}
+			{{volont.name}}<br>
+			{% if user.is_authenticated %}
+				<a href="{% url 'news:volon_naprav' pk=volont.pk %}" class="post_link">Записаться</a><br>
+			{% endif %}
+		{% endfor %}
+		{% if user.id == 7 or user.id == 1  %}
+			<a href="{% url 'news:add' %}"  class="post_link">Создать событие</a><br>
+		{% endif %}
+	</div>
+<div class="calendar">
+	Выберите период времени
+	<form method="post">
+		{% csrf_token %}
+		<div>{{ form }}</div>
+		<button type="submit">Выбрать</button>
+	</form>
+</div>
+{% if posts %}
+{% for post in posts %}
+{% if post.tags == 'trud' %}
+	<div class="post">
+		<div class="post-author">
+			<div class="post-author-a">
+			    <div>
+					{% if post.tags == 'trud' %}
+					<a href="{% url 'news:trud' %}" class="post_link">{{ post.get_tags_display}}</a><br>
+					{% endif %}
+					Дата публикации: {{ post.pubdate|date:"d M Y H:i" }}
+				</div>
+			</div>
+			{% if user.is_authenticated %}
+				<div class="post-author-b">
+					<a href="{% url 'news:detail' pk=post.pk %}" class="post_link">⋮</a>
+				</div>
+			{% endif %}
+		</div>
+		<div class="post-content">
+			{{ post.name}}<br>{{ post.eventtime }} {{ post.eventdate }}<br>
+			Количество свободных мест: {{ post.mesta }}<br>
+			Цена: {{ post.stoim }}<br>
+			{% if user.is_authenticated %}
+				{% if post in your_zapisi %}
+					Вы записаны<br>
+				{% endif %}
+			{% endif %}
+
+			{% if post.image %}
+				<a href="{{ post.image.url }}"><img src="{{ post.image.url }}" class="media"></a>
+			{% endif %}
+		</div>
+	</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "layout/basic.html" %}
+
+
+{% block title %}Активация выполнена{% endblock %}
+
+{% block content %}
+<div class="profile">
+	<h2>Активация</h2>
+	<p>Активировано успешно</p>
+	<p><a href="{% url 'news:login' %}"  class="post_link">Войти</a></p>
+</div>
+{% endblock %}

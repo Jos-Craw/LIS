@@ -1,0 +1,18 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+	{% if comments %}
+			{% for comment in comments %}
+			<div class="profile">
+				{% if comment.post.name %}
+				{{ comment.post.name}}<br>
+				{{ comment.post.eventtime }} {{ comment.post.eventdate }}<br>
+				{% else %}
+				{{ comment.vist.name }}<br>
+				{% endif %}
+				{{ comment.author }} {{ comment.pubdate|date:"d M Y H:i" }}<br>
+				{{ comment.content|urlize }}<br>
+			</div>
+			{% endfor %}
+		{% endif %}
+{% endblock %}

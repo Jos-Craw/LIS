@@ -1,0 +1,49 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+<div class="calendar">
+	Выберите период времени
+	<form method="post">
+		{% csrf_token %}
+		<div>{{ form }}</div>
+		<button type="submit">Выбрать</button>
+	</form>
+</div>
+{% if posts %}
+{% for post in posts %}
+	<div class="post">
+		<div class="post-author">
+			<div class="post-author-a">
+			    <div>
+			    	{% if post.tags == 'cult' %}
+					<a href="{% url 'news:cult' %}" class="post_link">{{post.get_tags_display}}</a><br>
+					{% elif post.tags == 'sport' %}
+					<a href="{% url 'news:sport' %}" class="post_link">{{post.get_tags_display}}</a><br>
+					{% elif post.tags == 'mass' %}
+					<a href="{% url 'news:mass' %}" class="post_link">{{post.get_tags_display}}</a><br>
+					{% if post.vist == True %}
+					Выставка <br>
+					{% endif %}
+					{% elif post.tags == 'trud' %}
+					<a href="{% url 'news:trud' %}" class="post_link">{{post.get_tags_display}}</a><br>
+					{% endif %}
+					Дата публикации: {{post.pubdate|date:"d M Y H:i" }}
+				</div>
+			</div>
+			{% if user.is_authenticated %}
+				<div class="post-author-b">
+					<a href="{% url 'news:detail' pk=post.pk %}" class="post_link">⋮</a>
+				</div>
+			{% endif %}
+		</div>
+		<div class="post-content">
+			{{ post.name}}<br>  {{ post.eventtime }} {{ post.eventdate }}<br>
+			{% if post.image %}
+				<img src="{{ post.image.url }}" class="media"><br>
+			{% endif %}
+			Количество свободных мест: {{ post.mesta_now }}<br>
+		</div>
+	</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

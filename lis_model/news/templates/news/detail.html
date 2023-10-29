@@ -1,0 +1,83 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+	<div class="post">
+		<div class="post-author">
+			<div class="post-author-a">
+				<div>
+					Дата публикации: {{ post.pubdate|date:"d M Y H:i" }}
+				</div>
+			</div>
+		</div>
+		<div class="post-content">
+			{{ post.name}}<br>
+			{{ post.content}}<br>{{ post.eventtime }} {{ post.eventdate }}<br>
+			Количество свободных мест: {{ post.mesta_now }}<br>
+			Цена: {{ post.stoim }}<br>
+			{% if a <  post.eventdate  %}
+				{% if post.mesta == 0 %}
+					Нет мест<br>
+				{% else %}
+					{% if post in your_zapisi %}
+						{% if b == post.eventdate %}
+							Нельзя отписаться<br>
+						{% else %}
+							{% for posttype in posttypes %}
+								{% if posttype.post_id == post.id%}
+									{% if posttype.zap_type == False %}
+										<a href="{% url 'news:otpis' pk=post.pk %}" class="post_link">ОТПИСАТЬСЯ ЛИЧНО</a><br>
+									{% else %}
+										<a href="{% url 'news:otpisg' pk=post.pk %}" class="post_link">ОТПИСАТЬ ГРУППУ</a><br>
+									{% endif %}
+								{% endif %}	
+							{% endfor %}
+						{% endif %}
+					{% else %}
+						{% if post.mesta_now == 0 %}
+							Нет мест<br>
+						{% else %}
+							<a href="{% url 'news:zapis' pk=post.pk %}" class="post_link">ЗАПИСАТЬСЯ ЛИЧНО</a><br>
+							<a href="{% url 'news:zapisg' pk=post.pk  %}" class="post_link">ГРУППОВАЯ ЗАПИСЬ</a><br>
+						{% endif %}
+					{% endif %}
+					{% if post in your_zapisi %}
+						Вы записаны<br>
+					{% endif %}
+				{% endif %}
+			{% else %}
+				Мероприятие прошло<br>
+			{% endif %}
+			{% if post.image %}
+				<a href="{{ post.image.url }}"><img src="{{ post.image.url }}" class="media"></a>
+			{% endif %}
+			{% if post.video %}
+				<video src="{{ post.video.url }}" class="media" controls="controls"></video><br>
+			{% endif %}
+			{% if post.audio %}
+				<audio src="{{ post.audio.url }}" controls="controls"></audio><br>
+			{% endif %}
+			{% if post.file %}
+				<a href='{{ post.file.url }}' target="-blank" class="file">{{post.filename}}</a><br>
+			{% endif %}
+			{% if user.is_superuser == 1 %}
+				<a href="{% url 'news:delete_post' pk=post.pk %}"  class="post_link">Delete</a>
+			{% endif %}
+		</div>
+	{% if messageSent %}
+		Отзыв опубликуется после модерации
+	{% endif %}
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit" class="btn btn-success">Добавить отзыв</button>
+		</form><br>
+		{% if comments %}
+			{% for comment in comments %}
+			<div class="comment">
+				{{ comment.author }} {{ comment.pubdate|date:"d M Y H:i" }}<br>
+				{{ comment.content|urlize }}<br>
+			</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+{% endblock %}
